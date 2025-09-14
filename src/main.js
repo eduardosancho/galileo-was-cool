@@ -28,7 +28,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
-// controls.autoRotate = true;
+controls.autoRotate = true;
 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -36,17 +36,7 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-const clock = new THREE.Clock();
-let previousTime = 0;
-
 const renderLoop = () => {
-  const currentTime = clock.getElapsedTime();
-  const delta = currentTime - previousTime;
-  previousTime = currentTime;
-
-  cubeMesh.rotation.y += THREE.MathUtils.degToRad(1) * delta * 20;
-
-  cubeMesh.scale.x = Math.sin(currentTime) * 0.5 + 2;
   
   controls.update();
   renderer.render(scene, camera);
