@@ -6,20 +6,8 @@ const scene = new THREE.Scene();
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
 const cubeMaterial = new THREE.MeshBasicMaterial({ color: 'red', wireframe: true});
 const cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
-cubeMesh.position.y = 1;
 
 scene.add(cubeMesh);
-
-cubeMesh.rotation.reorder('YXZ');
-
-cubeMesh.rotation.x = THREE.MathUtils.degToRad(45);
-cubeMesh.rotation.y = THREE.MathUtils.degToRad(90);
-cubeMesh.scale.x = 1
-cubeMesh.position.x = 1
-cubeMesh.position.y = 1
-
-const axesHelper = new THREE.AxesHelper(2);
-cubeMesh.add(axesHelper);
 
 const camera = new THREE.PerspectiveCamera(
   35,
@@ -46,9 +34,20 @@ window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
-})
+});
+
+const clock = new THREE.Clock();
+let previousTime = 0;
 
 const renderLoop = () => {
+  const currentTime = clock.getElapsedTime();
+  const delta = currentTime - previousTime;
+  previousTime = currentTime;
+
+  cubeMesh.rotation.y += THREE.MathUtils.degToRad(1) * delta * 20;
+
+  cubeMesh.scale.x = Math.sin(currentTime) * 0.5 + 2;
+  
   controls.update();
   renderer.render(scene, camera);
   window.requestAnimationFrame(renderLoop);
