@@ -10,11 +10,15 @@ const geometry = new THREE.BoxGeometry(1, 1, 1);
 const torusKnotGeometry = new THREE.TorusKnotGeometry(0.5, 0.15, 100, 16);
 const planeGeometry = new THREE.PlaneGeometry(1, 1);
 
-const material = new THREE.MeshPhongMaterial();
-material.shininess = 1000;
-material.color = new THREE.Color('red');
+const material = new THREE.MeshPhysicalMaterial();
+material.color = new THREE.Color('green');
 
-pane.addBinding(material, 'shininess', { min: 0, max: 1000, step: 1 });
+pane.addBinding(material, 'metalness', { min: 0, max: 1, step: 0.01 });
+pane.addBinding(material, 'roughness', { min: 0, max: 1, step: 0.01 });
+// reflectivity
+pane.addBinding(material, 'reflectivity', { min: 0, max: 1, step: 0.01 });
+// clearcoat
+pane.addBinding(material, 'clearcoat', { min: 0, max: 1, step: 0.01 });
 
 const mesh = new THREE.Mesh(geometry, material);
 const mesh2 = new THREE.Mesh(torusKnotGeometry, material);
@@ -27,7 +31,7 @@ scene.add(mesh);
 scene.add(mesh2);
 scene.add(plane);
 
-const light = new THREE.AmbientLight('white', 0.2);
+const light = new THREE.AmbientLight('white', 0.4);
 scene.add(light);
 
 const pointLight = new THREE.PointLight('white', 10);
