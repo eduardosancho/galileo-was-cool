@@ -9,9 +9,11 @@ const pane = new Pane();
 const scene = new THREE.Scene();
 
 const textureLoader = new THREE.TextureLoader();
+const cubeTextureLoader = new THREE.CubeTextureLoader()
+cubeTextureLoader.setPath('/textures/cubeMap/')
 
 const sunTexture = textureLoader.load("/textures/2k_sun.jpg");
-sunTexture.colorSpace = THREE.SRGBColorSpace  
+sunTexture.colorSpace = THREE.SRGBColorSpace
 const mercuryTexture = textureLoader.load("/textures/2k_mercury.jpg");
 mercuryTexture.colorSpace = THREE.SRGBColorSpace
 const venusTexture = textureLoader.load("/textures/2k_venus_surface.jpg");
@@ -22,6 +24,18 @@ const marsTexture = textureLoader.load("/textures/2k_mars.jpg");
 marsTexture.colorSpace = THREE.SRGBColorSpace
 const moonTexture = textureLoader.load("/textures/2k_moon.jpg");
 moonTexture.colorSpace = THREE.SRGBColorSpace
+
+
+const backgroundTexture = cubeTextureLoader
+  .load([
+    'px.png',
+    'nx.png',
+    'py.png',
+    'ny.png',
+    'pz.png',
+    'nz.png'
+  ])
+scene.background = backgroundTexture;
 
 const mercuryMaterial = new THREE.MeshStandardMaterial({
   map: mercuryTexture,
@@ -121,7 +135,7 @@ function createMoon(moon) {
 }
 
 
-const planetMeshes = planets.map((planet) => { 
+const planetMeshes = planets.map((planet) => {
   const planetMesh = createPlanet(planet);
   scene.add(planetMesh);
 
@@ -132,8 +146,11 @@ const planetMeshes = planets.map((planet) => {
   return planetMesh;
 });
 
-const ambientLight = new THREE.AmbientLight('white', 0.5);
+const ambientLight = new THREE.AmbientLight('white', 0.05);
 scene.add(ambientLight);
+
+const pointLight = new THREE.PointLight('white', 300);
+scene.add(pointLight);
 
 // initialize the camera
 const camera = new THREE.PerspectiveCamera(
@@ -179,7 +196,7 @@ const renderloop = () => {
       moon.position.z = Math.cos(moon.rotation.y) * planets[planetIndex].moons[moonIndex].distance;
     });
   });
-  
+
 
   controls.update();
   renderer.render(scene, camera);
