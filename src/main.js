@@ -6,13 +6,18 @@ const pane = new Pane();
 
 const scene = new THREE.Scene();
 
+const textureLoader = new THREE.TextureLoader();
+
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 const torusKnotGeometry = new THREE.TorusKnotGeometry(0.5, 0.15, 100, 16);
 const planeGeometry = new THREE.PlaneGeometry(1, 1);
 const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
 const cylinderGeometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
 
+const textureTest = textureLoader.load('/textures/whispy-grass-meadow-bl/wispy-grass-meadow_albedo.png');
+
 const material = new THREE.MeshBasicMaterial();
+material.map = textureTest;
 
 const group = new THREE.Group();
 
