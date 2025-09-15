@@ -63,14 +63,18 @@ window.addEventListener("resize", () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
+const clock = new THREE.Clock();
 
 // render the scene
 const renderloop = () => {
-  // group.children.forEach((child) =>{
-  //   if (child instanceof THREE.Mesh) {
-  //     child.rotation.y += 0.01
-  //   }
-  // })
+  const elapsedTime = clock.getElapsedTime();
+  
+  earth.rotation.y += 0.01;
+  earth.position.x = Math.sin(elapsedTime) * 10;
+  earth.position.z = Math.cos(elapsedTime) * 10;
+
+  moon.position.x = Math.sin(elapsedTime) * 2;
+  moon.position.z = Math.cos(elapsedTime) * 2;
 
   controls.update();
   renderer.render(scene, camera);
