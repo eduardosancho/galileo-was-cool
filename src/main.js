@@ -8,131 +8,31 @@ const pane = new Pane();
 // initialize the scene
 const scene = new THREE.Scene();
 
-// initialize the loader 
-const textureLoader = new THREE.TextureLoader()
+const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+const sunMaterial = new THREE.MeshBasicMaterial({
+  color: 'yellow'
+});
 
-// initialize the geometry
-const geometry = new THREE.SphereGeometry(1, 32, 32);
-const uv2Geometry = new THREE.BufferAttribute(geometry.attributes.uv.array, 2)
-geometry.setAttribute('uv2', uv2Geometry)
+const sun = new THREE.Mesh(sphereGeometry, sunMaterial);
+sun.scale.setScalar(5);
+scene.add(sun);
 
-// load the grass textures
-const grassAlbedo = textureLoader.load('/textures/whispy-grass-meadow-bl/wispy-grass-meadow_albedo.png')
-grassAlbedo.colorSpace = THREE.SRGBColorSpace
-const grassAo = textureLoader.load('/textures/whispy-grass-meadow-bl/wispy-grass-meadow_ao.png')
-const grassHeight = textureLoader.load('/textures/whispy-grass-meadow-bl/wispy-grass-meadow_height.png')
-const grassMetallic = textureLoader.load('/textures/whispy-grass-meadow-bl/wispy-grass-meadow_metallic.png')
-const grassNormal = textureLoader.load('/textures/whispy-grass-meadow-bl/wispy-grass-meadow_normal-ogl.png')
-const grassRoughness = textureLoader.load('/textures/whispy-grass-meadow-bl/wispy-grass-meadow_roughness.png')
+const earthMaterial = new THREE.MeshBasicMaterial({
+  color: 'blue'
+});
+const earth = new THREE.Mesh(sphereGeometry, earthMaterial);
+earth.position.x = 10;
+scene.add(earth);
 
-// load the boulder textures
-const boulderAlbedo = textureLoader.load('/textures/badlands-boulders-bl/badlands-boulders_albedo.png')
-boulderAlbedo.colorSpace = THREE.SRGBColorSpace
-const boulderAo = textureLoader.load('/textures/badlands-boulders-bl/badlands-boulders_ao.png')
-const boulderHeight = textureLoader.load('/textures/badlands-boulders-bl/badlands-boulders_height.png')
-const boulderMetallic = textureLoader.load('/textures/badlands-boulders-bl/badlands-boulders_metallic.png')
-const boulderNormal = textureLoader.load('/textures/badlands-boulders-bl/badlands-boulders_normal-ogl.png')
-const boulderRoughness = textureLoader.load('/textures/badlands-boulders-bl/badlands-boulders_roughness.png')
+const moonMaterial = new THREE.MeshBasicMaterial({
+  color: 'gray'
+});
+const moon = new THREE.Mesh(sphereGeometry, moonMaterial);
+moon.scale.setScalar(0.3);
+moon.position.x = 2;
 
-// load the space cruiser textures
-const spaceCruiserAlbedo = textureLoader.load('/textures/space-cruiser-panels2-bl/space-cruiser-panels2_albedo.png')
-spaceCruiserAlbedo.colorSpace = THREE.SRGBColorSpace
-const spaceCruiserAo = textureLoader.load('/textures/space-cruiser-panels2-bl/space-cruiser-panels2_ao.png')
-const spaceCruiserHeight = textureLoader.load('/textures/space-cruiser-panels2-bl/space-cruiser-panels2_height.png')
-const spaceCruiserMetallic = textureLoader.load('/textures/space-cruiser-panels2-bl/space-cruiser-panels2_metallic.png')
-const spaceCruiserNormal = textureLoader.load('/textures/space-cruiser-panels2-bl/space-cruiser-panels2_normal-ogl.png')
-const spaceCruiserRoughness = textureLoader.load('/textures/space-cruiser-panels2-bl/space-cruiser-panels2_roughness.png')
+earth.add(moon);
 
-// grass material
-const grassPane = pane.addFolder({
-  title: 'Grass Material',
-  expanded: true
-})
-
-const grassMaterial = new THREE.MeshStandardMaterial();
-grassMaterial.map = grassAlbedo
-grassMaterial.roughnessMap = grassRoughness
-grassMaterial.metalnessMap = grassMetallic
-grassMaterial.normalMap = grassNormal
-grassMaterial.displacementMap = grassHeight
-grassMaterial.displacementScale = 0.1
-grassMaterial.aoMap = grassAo
-
-grassPane.addBinding(grassMaterial, 'metalness', { min: 0, max: 1, step: 0.01 })
-grassPane.addBinding(grassMaterial, 'roughness', { min: 0, max: 1, step: 0.01 })
-grassPane.addBinding(grassMaterial, 'displacementScale', { min: 0, max: 1, step: 0.01 })
-grassPane.addBinding(grassMaterial, 'aoMapIntensity', { min: 0, max: 1, step: 0.01 })
-
-// boulder material
-const boulderPane = pane.addFolder({
-  title: 'Boulder Material',
-  expanded: true
-})
-
-const boulderMaterial = new THREE.MeshStandardMaterial();
-boulderMaterial.map = boulderAlbedo
-boulderMaterial.roughnessMap = boulderRoughness
-boulderMaterial.metalnessMap = boulderMetallic
-boulderMaterial.normalMap = boulderNormal
-boulderMaterial.displacementMap = boulderHeight
-boulderMaterial.displacementScale = 0.1
-boulderMaterial.aoMap = boulderAo
-
-boulderPane.addBinding(boulderMaterial, 'metalness', { min: 0, max: 1, step: 0.01 })
-boulderPane.addBinding(boulderMaterial, 'roughness', { min: 0, max: 1, step: 0.01 })
-boulderPane.addBinding(boulderMaterial, 'displacementScale', { min: 0, max: 1, step: 0.01 })
-boulderPane.addBinding(boulderMaterial, 'aoMapIntensity', { min: 0, max: 1, step: 0.01 })
-
-// space cruiser material
-const spaceCruiserPane = pane.addFolder({
-  title: 'Space Cruiser Material',
-  expanded: true
-})
-
-const spaceCruiserMaterial = new THREE.MeshStandardMaterial();
-spaceCruiserMaterial.map = spaceCruiserAlbedo
-spaceCruiserMaterial.roughnessMap = spaceCruiserRoughness
-spaceCruiserMaterial.metalnessMap = spaceCruiserMetallic
-spaceCruiserMaterial.normalMap = spaceCruiserNormal
-spaceCruiserMaterial.displacementMap = spaceCruiserHeight
-spaceCruiserMaterial.displacementScale = 0.1
-spaceCruiserMaterial.aoMap = spaceCruiserAo
-
-spaceCruiserPane.addBinding(spaceCruiserMaterial, 'metalness', { min: 0, max: 1, step: 0.01 })
-spaceCruiserPane.addBinding(spaceCruiserMaterial, 'roughness', { min: 0, max: 1, step: 0.01 })
-spaceCruiserPane.addBinding(spaceCruiserMaterial, 'displacementScale', { min: 0, max: 1, step: 0.01 })
-spaceCruiserPane.addBinding(spaceCruiserMaterial, 'aoMapIntensity', { min: 0, max: 1, step: 0.01 })
-
-// intialize a group
-const group = new THREE.Group()
-
-// initialize the mesh
-
-const grass = new THREE.Mesh()
-grass.geometry = geometry
-grass.material = grassMaterial
-
-const boulder = new THREE.Mesh()
-boulder.geometry = geometry
-boulder.material = boulderMaterial
-boulder.position.x = 2.5
-
-const spaceCruiser = new THREE.Mesh()
-spaceCruiser.geometry = geometry
-spaceCruiser.material = spaceCruiserMaterial
-spaceCruiser.position.x = -2.5
-
-// add the mesh to the scene
-group.add(grass, boulder, spaceCruiser )
-scene.add(group);
-
-// initialize the light
-const light = new THREE.AmbientLight(0xffffff, 1);
-scene.add(light);
-
-const pointLight = new THREE.PointLight(0xffffff, 200);
-pointLight.position.set(5, 5, 5);
-scene.add(pointLight);
 
 // initialize the camera
 const camera = new THREE.PerspectiveCamera(
@@ -141,7 +41,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   10000
 );
-camera.position.z = 10;
+camera.position.z = 100;
 camera.position.y = 5
 
 // initialize the renderer
